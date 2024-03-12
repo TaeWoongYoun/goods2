@@ -11,7 +11,7 @@ $(document).ready(function () {
         var reader = new FileReader();
         reader.onload = function (e) {
             originalImageSrc = e.target.result; // 원본 이미지 주소 저장
-            $("#contentContainer").html('<img src="' + e.target.result + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
+            $("#contentContainer").html('<img id="previewImage" src="' + e.target.result + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
             $("#textInput").val("");
         };
         reader.readAsDataURL(file);
@@ -25,11 +25,16 @@ $(document).ready(function () {
         var text = $("#textInput").val();
         drawTextOnImage(text);
         $("#textInput").hide().val("");
-        $("#previewImage").hide();
     });
 
     $("#resetTextButton").on("click", function () {
-        clearTextOnImage();
+        resetToOriginal();
+    });
+
+    $("#deleteButton").on("click", function () {
+        deleteAllImages();
+        $("#textInput").val(""); // 추가된 이미지 삭제 시 텍스트도 초기화
+        $("#previewImage").show();
     });
 
     function drawTextOnImage(text) {
@@ -48,12 +53,17 @@ $(document).ready(function () {
 
         context.fillText(text, canvas.width / 2, canvas.height / 2);
 
-        $("#contentContainer").html('<img src="' + canvas.toDataURL("image/png") + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
+        $("#contentContainer").html('<img id="previewImage" src="' + canvas.toDataURL("image/png") + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
+        $("#previewImage").show();
     }
 
-    function clearTextOnImage() {
+    function resetToOriginal() {
+        // 원본 이미지로 리셋
+        $("#contentContainer").html('<img id="previewImage" src="' + originalImageSrc + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
         $("#textInput").val("");
-        $("#contentContainer").html('<img src="' + originalImageSrc + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
-        $("#previewImage").show();
+    }
+
+    function deleteAllImages() {
+        $(".editarea img").remove();
     }
 });
