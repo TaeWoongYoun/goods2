@@ -1,4 +1,9 @@
 $(document).ready(function () {
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+
+    var img = document.createElement("img");
+
     $("#uploadButton").on("click", function () {
         $("#fileInput").trigger("click");
     });
@@ -8,8 +13,13 @@ $(document).ready(function () {
 
         var reader = new FileReader();
         reader.onload = function (e) {
-            $("#contentContainer").html('<img src="' + e.target.result + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
-            $("#textInput").val("");
+            img.src = e.target.result;
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context.drawImage(img, 0, 0, canvas.width, canvas.height);
+                $("#textInput").val("");
+            };
         };
         reader.readAsDataURL(file);
     });
@@ -24,14 +34,13 @@ $(document).ready(function () {
         $("#textInput").hide().val("");
     });
 
-    function drawTextOnImage(text) {
-        var canvas = document.getElementById("canvas");
-        var context = canvas.getContext("2d");
+    $("#resetTextButton").on("click", function () {
+        clearTextOnImage();
+    });
 
-        var img = document.querySelector('.editarea img');
+    function drawTextOnImage(text) {
         canvas.width = img.width;
         canvas.height = img.height;
-
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
         context.font = "20px Arial";
@@ -41,6 +50,13 @@ $(document).ready(function () {
         context.fillText(text, canvas.width / 2, canvas.height / 2);
 
         $("#contentContainer").html('<img src="' + canvas.toDataURL("image/png") + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
-        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function clearTextOnImage() {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        $("#contentContainer").html('<img src="' + canvas.toDataURL("image/png") + '" alt="업로드된 이미지" style="max-width: 100%; max-height: 100%;" />');
     }
 });
