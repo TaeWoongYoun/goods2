@@ -35,7 +35,7 @@ $(document).ready(function () {
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
         context.font = "20px Arial";
-        context.fillStyle = "white";
+        context.fillStyle = "black";
         context.textAlign = "center";
 
         context.fillText(text, canvas.width / 2, canvas.height / 2);
