@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var originalImageSrc = ""; // 추가된 원본 이미지 주소 저장
-
+    // 원래대로 버튼
     $("#uploadButton").on("click", function () {
         $("#fileInput").trigger("click");
     });
@@ -16,7 +16,7 @@ $(document).ready(function () {
         };
         reader.readAsDataURL(file);
     });
-
+    // 글상자버튼
     $("#textButton").on("click", function () {
         $("#textInput").toggle().focus();
     });
